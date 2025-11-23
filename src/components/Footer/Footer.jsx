@@ -3,11 +3,13 @@ import { CgProfile } from "react-icons/cg";
 import LogoIcon from "../../assets/images/logo.png"
 import { Link } from "react-router-dom";
 
+const accentColor = "#1D4ED8";
+
 export default function Footer() {
   return (
     <footer className="w-full bg-black text-gray-300 border-t border-white/10">
       {/* Gradient Brand Line */}
-      <div className="w-full h-1 bg-linear-to-r from-purple-500 via-blue-500 to-cyan-400"></div>
+      <div className="w-full h-1" style={{backgroundColor:accentColor}}></div>
 
       <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
         {/* Branding */}
