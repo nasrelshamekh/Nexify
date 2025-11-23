@@ -2,7 +2,7 @@ import { Alert, Button, Input, Select, SelectItem } from '@heroui/react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
-import { regSchema } from '../../../lib/validationSchemas/AuthSchema'
+import { regSchema } from '../../../lib/validationSchemas/authSchemauthSchema'
 import { IoIosEye, IoIosEyeOff } from 'react-icons/io'
 import { useState } from 'react'
 import { registerUser } from '../../../services/authServices'
