@@ -1,5 +1,6 @@
-import { Button, Card, CardBody, Tabs, Tab, Skeleton } from "@heroui/react";
+import { Button, Card, CardBody, Tabs, Tab, Skeleton, useDisclosure } from "@heroui/react";
 import { BsCamera, BsThreeDotsVertical, BsPencil } from "react-icons/bs";
+import { RiLockPasswordFill } from "react-icons/ri";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import CardHeader from "../../components/PostCard/CardHeader";
 import CardFooter from "../../components/PostCard/CardFooter";
@@ -9,12 +10,14 @@ import { authContext } from "../../Context/AuthContext";
 import Post from "../../components/Post/Post";
 import PostSkeleton from './../../components/Skeletons/PostSkeleton';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import UserProfileModal from "../../components/UserProfileModal/UserProfileModal";
 
 export default function UserProfile() {
 
   const { userData } = useContext(authContext)
   const [posts, setPosts] = useState([]);
   const queryClient = useQueryClient();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // Fetch user posts using React Query
   const { data, isLoading } = useQuery({
@@ -81,6 +84,9 @@ export default function UserProfile() {
                 <Button variant="bordered" startContent={<BsPencil />}>
                   Edit Profile
                 </Button>
+                <Button variant="bordered" startContent={<RiLockPasswordFill />} onPress={onOpen} onOpenChange={onOpenChange}>
+                  Change Password
+                </Button>
 
                 <Button variant="bordered" isIconOnly>
                   <BsThreeDotsVertical />
@@ -96,36 +102,147 @@ export default function UserProfile() {
                 variant="underlined"
                 className="text-gray-700"
               >
-                <Tab key="posts" title="Posts" />
-                <Tab key="about" title="About" />
-                <Tab key="friends" title="Friends" />
+                {/* POSTS TAB */}
+                <Tab key="posts" title="Posts">
+                  <div className="mt-6 space-y-6">
+                    {isLoading ?
+                      <PostSkeleton />
+                      : posts.length === 0 ?
+                        <p className="text-center text-gray-500 py-10">No posts yet.</p>
+                        :
+                        posts.map((post) => (
+                          <Post
+                            key={post._id}
+                            post={post}
+                            getAllPosts={() =>
+                              queryClient.invalidateQueries(["userPosts", userData._id])
+                            }
+                          />
+                        ))
+                    }
+                  </div>
+                </Tab>
+
+                <Tab key="about" title="About">
+                  <div className="mt-6 space-y-6">
+
+                    {/* ABOUT CARD */}
+                    <div className="bg-white rounded-xl shadow-md p-6">
+                      <h2 className="text-xl font-semibold text-gray-800 mb-4">About</h2>
+
+                      {/* Bio */}
+                      <p className="text-gray-600 leading-relaxed mb-6">
+                        Passionate Frontend Developer focused on creating clean, beautiful, and user-friendly
+                        web experiences. Loves React, Tailwind, and building modern UI components.
+                      </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        {/* DETAILS LEFT */}
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold w-28 text-gray-700">Full Name:</span>
+                            <span className="text-gray-600">{userData.name}</span>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold w-28 text-gray-700">Gender:</span>
+                            <span className="text-gray-600">{userData.gender == "male" ? "Male" : "Female"}</span>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold w-28 text-gray-700">Email:</span>
+                            <span className="text-gray-600">{userData.email}</span>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold w-28 text-gray-700">Date of Birth:</span>
+                            <span className="text-gray-600">{userData.dateOfBirth}</span>
+                          </div>
+                        </div>
+
+
+
+                        {/* DETAILS RIGHT */}
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold w-28 text-gray-700">Role:</span>
+                            <span className="text-gray-600">Frontend Developer</span>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold w-28 text-gray-700">Location:</span>
+                            <span className="text-gray-600">Alexandria, Egypt</span>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold w-28 text-gray-700">Joined:</span>
+                            <span className="text-gray-600">{new Date(userData.createdAt).toLocaleString("en-US", { dateStyle: "long" })}</span>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold w-28 text-gray-700">Website:</span>
+                            <a
+                              href="#"
+                              className="text-blue-600 hover:underline"
+                            >
+                              www.example.com
+                            </a>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    {/* SKILLS CARD */}
+                    <div className="bg-white rounded-xl shadow-md p-6">
+                      <h2 className="text-xl font-semibold text-gray-800 mb-4">Skills</h2>
+
+                      <div className="flex flex-wrap gap-3">
+                        <span className="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm shadow-sm">
+                          React
+                        </span>
+                        <span className="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm shadow-sm">
+                          Tailwind CSS
+                        </span>
+                        <span className="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm shadow-sm">
+                          JavaScript
+                        </span>
+                        <span className="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm shadow-sm">
+                          HTML
+                        </span>
+                        <span className="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm shadow-sm">
+                          CSS
+                        </span>
+                        <span className="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm shadow-sm">
+                          Git
+                        </span>
+                        <span className="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm shadow-sm">
+                          Vite
+                        </span>
+                      </div>
+                    </div>
+
+                  </div>
+                </Tab>
+
+
+                <Tab key="friends" title="Friends">
+                  <div className="p-4 text-gray-600">
+                    Friends
+                  </div>
+                </Tab>
               </Tabs>
             </div>
 
-            {/* -------- POSTS SECTION -------- */}
-            <div className="mt-6 space-y-6">
-              {isLoading ?
-                <PostSkeleton />
-                : posts.length === 0 ?
-                  <p className="text-center text-gray-500 py-10">No posts yet.</p>
-                  :
-                  posts.map((post) => (
-                    <Post
-                      key={post._id}
-                      post={post}
-                      getAllPosts={() => queryClient.invalidateQueries(["userPosts", userData._id])}
-                    />
-                  )
-                  )}
 
-            </div>
           </div>
         </div>
 
       </div>
+      <UserProfileModal isOpen={isOpen} onOpenChange={onOpenChange} />
 
-
-    </div>
+    </div >
 
   );
 }

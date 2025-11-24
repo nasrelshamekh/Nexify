@@ -26,8 +26,23 @@ export async function getLoggedUserData() {
     const data = await axios.get(`${apiURL}/users/profile-data`, {
         headers: {
             "Content-Type": "application/json",
-            "token" : localStorage.getItem("userToken")
+            "token": localStorage.getItem("userToken")
         }
     })
+    return data
+}
+
+export async function changeUserPassword(password, newPassword) {
+    const data = await axios.patch(`${apiURL}/users/change-password`,
+        {
+            password: password,
+            newPassword: newPassword
+        },
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "token": localStorage.getItem("userToken")
+            }
+        })
     return data
 }

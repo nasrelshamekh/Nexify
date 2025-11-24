@@ -24,3 +24,8 @@ export const loginSchema = z.object({
     password: z.string().nonempty("Password is required!").min(4, "Name must be atleast 5 characters!"),
 
 })
+
+export const changePasswordSchema = z.object({
+    password: z.string().nonempty("Password is required!").min(4, "Name must be atleast 5 characters!"),
+    newPassword: z.string().nonempty("Password is required!").min(4, "Name must be atleast 5 characters!")
+})

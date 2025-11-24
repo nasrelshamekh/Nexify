@@ -14,7 +14,7 @@ export default function Login() {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const {setToken} = useContext(authContext)
+  const { setToken } = useContext(authContext)
   const navigate = useNavigate()
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
@@ -32,18 +32,17 @@ export default function Login() {
     setSuccessMsg("")
     console.log(formData);
     try {
-      const {data} = await loginUser(formData)
+      const { data } = await loginUser(formData)
       console.log(data);
       setSuccessMsg(data.message)
       toast.success(data.message)
-      localStorage.setItem("userToken" , data?.token)
+      localStorage.setItem("userToken", data?.token)
       setToken(data?.token)
       navigate("/home")
     } catch (error) {
       console.log(error);
-      setErrorMsg(error.data.error)
-      toast.error(error.data.error)
-
+      setErrorMsg(error.response.data.error)
+      toast.error(error.response.data.error)
     }
 
   }
@@ -64,7 +63,7 @@ export default function Login() {
 
           <div className='flex justify-between items-end'>
             <Button isLoading={isSubmitting} type='submit' color="primary">Sign in</Button>
-          <span>Don't have an account? <Link to={"/register"} className='font-bold'>Sign up!</Link></span>
+            <span>Don't have an account? <Link to={"/register"} className='font-bold'>Sign up!</Link></span>
           </div>
           {errorMsg && <Alert color="danger" title={errorMsg} className='w-1/2' />}
           {successMsg && <Alert color="success" title={successMsg} className='w-1/2' />}
