@@ -12,20 +12,21 @@ import {
     Alert,
 } from "@heroui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { changeUserPassword } from "../../services/authServices";
 import { changePasswordSchema } from "../../lib/validationSchemas/authSchema";
 import { toast } from "react-toastify";
 import { redirect, useNavigate } from "react-router-dom";
+import { authContext } from "../../Context/AuthContext";
 
 
 
 
 export default function UserProfileModal({ isOpen, onOpen, onOpenChange }) {
 
-
+    const { token, setToken, userData, isLoading } = useContext(authContext)
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -52,9 +53,8 @@ export default function UserProfileModal({ isOpen, onOpen, onOpenChange }) {
             setSuccessMsg("Password has been changed, please login again")
             toast.success("Password has been changed, please login again")
             localStorage.removeItem("userToken")
-            setTimeout(() => {
-                navigate("/login")
-            }, 2000)
+            setToken(false)
+            navigate("/login")
         } catch (error) {
             console.log(error);
             setErrorMsg("Incorrect current password")
