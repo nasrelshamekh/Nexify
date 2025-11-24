@@ -18,7 +18,7 @@ import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { changeUserPassword } from "../../services/authServices";
 import { changePasswordSchema } from "../../lib/validationSchemas/authSchema";
 import { toast } from "react-toastify";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 
 
@@ -30,6 +30,7 @@ export default function UserProfileModal({ isOpen, onOpen, onOpenChange }) {
     const [successMsg, setSuccessMsg] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
+    const navigate = useNavigate()
 
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
@@ -50,9 +51,9 @@ export default function UserProfileModal({ isOpen, onOpen, onOpenChange }) {
             console.log(response);
             setSuccessMsg("Password has been changed, please login again")
             toast.success("Password has been changed, please login again")
+            localStorage.removeItem("userToken")
             setTimeout(() => {
-                localStorage.removeItem("userToken")
-                window.location.href = "/login"
+                navigate("/login")
             }, 2000)
         } catch (error) {
             console.log(error);
