@@ -28,6 +28,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (data?.data?.posts) setPosts(data.data.posts);
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }, [data]);
 
 

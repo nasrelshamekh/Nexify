@@ -1,13 +1,14 @@
 import axios from "axios";
 
-export function getAllPosts() {
+export function getAllPosts(page) {
      return axios.get(`${import.meta.env.VITE_BASE_URL}/posts`, {
         headers: {
             "token" : localStorage.getItem("userToken")
         },
         params: {
-            "limit" : 50,
-            "sort" : "-createdAt"
+            "limit" : 5,
+            "sort" : "-createdAt",
+            page
         }
     })
 }
@@ -48,7 +49,7 @@ export async function deletePost(postId) {
     return data
 }
 
-export async function getUserPosts(userId) {
+export async function getUserPosts(userId, page) {
     const data = await axios.get(`${import.meta.env.VITE_BASE_URL}/users/${userId}/posts`, {
         headers: {
             "token" : localStorage.getItem("userToken")
