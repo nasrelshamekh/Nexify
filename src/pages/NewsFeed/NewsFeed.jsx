@@ -34,12 +34,15 @@ export default function NewsFeed() {
   return (
     <>
       <main className='min-h-screen bg-gray-200'>
-        <div className="container p-5">
-          <div className='grid grid-cols-4 gap-3'>
-            <div className='col-span-1'>
+        <div className="container p-3 sm:p-5">
+          <div className='grid grid-cols-1 lg:grid-cols-4 gap-3 lg:gap-5'>
+            {/* Sidebar - Hidden on mobile and tablet, visible on large screens */}
+            <div className='hidden lg:block lg:col-span-1'>
               <Sidebar />
             </div>
-            <div className="col-span-2 space-y-5">
+            
+            {/* Main Content - Full width on mobile/tablet, 2 columns on large screens */}
+            <div className="col-span-1 lg:col-span-2 space-y-3 sm:space-y-5">
               <CreatePost />
               {isLoading ? [...Array(5)].map((skeleton, index) => <PostSkeleton key={index} />) : <>
                 {data?.data.posts && data?.data.posts.map((post) => <Post key={post.id} post={post} />)}

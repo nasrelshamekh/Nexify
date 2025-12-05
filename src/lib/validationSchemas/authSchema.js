@@ -21,11 +21,11 @@ export const regSchema = z.object({
 
 export const loginSchema = z.object({
     email: z.string().nonempty("Email is required!").email("Email is not valid!"),
-    password: z.string().nonempty("Password is required!").min(4, "Name must be atleast 5 characters!"),
+    password: z.string().nonempty("Password is required!").min(4, "Password must be atleast 5 characters!"),
 
 })
 
 export const changePasswordSchema = z.object({
-    password: z.string().nonempty("Password is required!").min(4, "Name must be atleast 5 characters!"),
-    newPassword: z.string().nonempty("Password is required!").min(4, "Name must be atleast 5 characters!")
+    password: z.string().nonempty("Password is required!").min(4, "Password must be atleast 5 characters!"),
+    newPassword: z.string().nonempty("Password is required!").min(4, "Password must be atleast 5 characters!")
 })

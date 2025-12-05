@@ -30,13 +30,16 @@ export default function PostDetails() {
 
   return (
     <main className="min-h-screen bg-gray-200">
-      <div className="container p-5">
-        <div className="grid grid-cols-5 gap-3">
-          <div className="col-span-1">
+      <div className="container p-3 sm:p-5">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 lg:gap-5">
+          {/* Sidebar - Hidden on mobile/tablet, visible on large screens */}
+          <div className="hidden lg:block lg:col-span-1">
             <Sidebar />
           </div>
-          <div className="col-span-3">
-            <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200">
+
+          {/* Main Content - Full width on mobile/tablet, 3 columns on large screens */}
+          <div className="col-span-1 lg:col-span-3">
+            <div className="w-full lg:max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200">
               {isLoading || !post ? 
                 <PostSkeleton />
                : 
