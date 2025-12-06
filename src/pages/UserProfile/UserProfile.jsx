@@ -57,19 +57,18 @@ export default function UserProfile() {
         </div>
 
         {/* Main Content */}
-        <div className="col-span-1 lg:col-span-2">
+        <div className="col-span-1 lg:col-span-3 xl:col-span-2">
           {/* -------- PROFILE HEADER -------- */}
           <div className="w-full px-3 sm:px-4">
             <div className="relative flex flex-col md:flex-row md:items-end gap-3 sm:gap-4 -mt-12 sm:-mt-16 md:-mt-20">
               {/* Profile Image */}
-              {isLoading ? <Skeleton className="shrink-0 flex rounded-full w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 mx-auto md:mx-0" /> :
-                <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-lg mx-auto md:mx-0">
-                  <img
-                    src={userData.photo}
-                    alt="profile"
-                    className="w-full h-full object-cover"
-                  />
-                </div>}
+              <div className="relative shrink-0 w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-lg mx-auto md:mx-0">
+                <img
+                  src={userData.photo}
+                  alt="profile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
               {/* User Info */}
               <div className="grow text-center md:text-left">
