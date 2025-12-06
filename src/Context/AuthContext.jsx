@@ -11,13 +11,13 @@ export default function AuthContextProvider({ children }) {
         setIsLoading(true)
         try {
             const { data } = await getLoggedUserData()
-            console.log(data);
+
             setUserData(data.user)
 
         } catch (error) {
-            console.log(error);
 
-        }finally {
+
+        } finally {
             setIsLoading(false)
         }
     }

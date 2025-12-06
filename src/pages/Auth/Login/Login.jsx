@@ -30,17 +30,17 @@ export default function Login() {
   async function onSubmit(formData) {
     setErrorMsg("")
     setSuccessMsg("")
-    console.log(formData);
+
     try {
       const { data } = await loginUser(formData)
-      console.log(data);
+
       setSuccessMsg(data.message)
       toast.success(data.message)
       localStorage.setItem("userToken", data?.token)
       setToken(data?.token)
       navigate("/home")
     } catch (error) {
-      console.log(error);
+
       setErrorMsg(error.response.data.error)
       toast.error(error.response.data.error)
     }

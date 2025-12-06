@@ -17,13 +17,13 @@ export default function CardBody({ id, body, image, commentsLength, isPostDetail
     setIsLoading(true)
     try {
       const { data } = await createComment(comment)
-      console.log(data);
+
       setPostComments(data.comments)
       setCommentMsg("")
       toast.success("Comment added successfully!")
 
     } catch (error) {
-      console.log(error);
+
 
     } finally {
       setIsLoading(false)

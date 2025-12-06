@@ -23,7 +23,7 @@ export default function CardFooter({ comment, postUserId, postId, setPostComment
       getNewComments(postId)
       toast.success("Comment has been deleted!")
     } catch (error) {
-      console.log(error);
+
 
     } finally {
       setIsLoading(false)
@@ -34,10 +34,10 @@ export default function CardFooter({ comment, postUserId, postId, setPostComment
     try {
       const { data } = await getPostComments(postId)
       setPostComments(data.comments)
-      console.log(data);
+
 
     } catch (error) {
-      console.log(error);
+
 
     }
   }
@@ -52,12 +52,12 @@ export default function CardFooter({ comment, postUserId, postId, setPostComment
       // getNewComments(postId)
       setIsEditing(false)
       toast.success('Comment updated!')
-      console.log(data);
+
 
     } catch (error) {
-      console.log(error);
 
-    }finally {
+
+    } finally {
       setIsLoading2(false)
     }
   }

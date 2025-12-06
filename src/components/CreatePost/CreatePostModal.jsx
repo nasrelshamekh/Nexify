@@ -35,7 +35,6 @@ export default function CreatePostModal({ post, isOpen, onOpenChange, callback }
 
     function getFile() {
         const file = fileInput.current.files[0]
-        console.log(file);
         setFormDataFile(file)
         setSelectedPhoto(URL.createObjectURL(file))
     }
@@ -50,17 +49,17 @@ export default function CreatePostModal({ post, isOpen, onOpenChange, callback }
         try {
             if (post) {
                 const { data } = await updatePost(post._id, formData)
-                console.log(data);
+                
                 toast.success("Post has been updated!")
             } else {
             const { data } = await createPost(formData)
-            console.log(data);
+            
             toast.success("Post created!")
         }
          onOpenChange(false)
             callback()
         } catch (error) {
-            console.log(error);
+            
 
         } finally {
             setIsLoading(false)

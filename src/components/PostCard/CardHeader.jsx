@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useQueryClient } from '@tanstack/react-query'
 
-export default function CardHeader({post, photo, name, createdAt, postUserId, getAllPosts, isPostDetails }) {
+export default function CardHeader({ post, photo, name, createdAt, postUserId, getAllPosts, isPostDetails }) {
 
   const { userData } = useContext(authContext)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -19,7 +19,7 @@ export default function CardHeader({post, photo, name, createdAt, postUserId, ge
 
     try {
       const { data } = await deletePost(post._id)
-      console.log(data);
+
       if (isPostDetails) {
         navigate("/home")
       } else {
@@ -27,7 +27,7 @@ export default function CardHeader({post, photo, name, createdAt, postUserId, ge
       }
       toast.success("Post has been deleted!")
     } catch (error) {
-      console.log(error);
+
 
     }
   }

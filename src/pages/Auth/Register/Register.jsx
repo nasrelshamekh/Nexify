@@ -32,19 +32,19 @@ export default function Register() {
   async function onSubmit(data) {
     setErrorMsg("")
     setSuccessMsg("")
-    console.log(data);
-   try {
-     const response = await registerUser(data)
-    console.log(response);
-    setSuccessMsg(response.data.message)
-    toast.success(response.data.message)
-    navigate("/login")
-   } catch (error) {
-    console.log(error);
-    setErrorMsg(error.response.data.error)
-    toast.error(error.response.data.error)
-    
-   }
+
+    try {
+      const response = await registerUser(data)
+
+      setSuccessMsg(response.data.message)
+      toast.success(response.data.message)
+      navigate("/login")
+    } catch (error) {
+
+      setErrorMsg(error.response.data.error)
+      toast.error(error.response.data.error)
+
+    }
 
   }
 

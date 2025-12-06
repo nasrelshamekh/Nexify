@@ -46,17 +46,17 @@ export default function UserProfileModal({ isOpen, onOpen, onOpenChange }) {
     async function onSubmit(data) {
         setErrorMsg("")
         setSuccessMsg("")
-        console.log(data);
+
         try {
             const response = await changeUserPassword(data?.password, data?.newPassword)
-            console.log(response);
+
             setSuccessMsg("Password has been changed, please login again")
             toast.success("Password has been changed, please login again")
             localStorage.removeItem("userToken")
             setToken(false)
             navigate("/login")
         } catch (error) {
-            console.log(error);
+
             setErrorMsg("Incorrect current password")
             toast.error("Incorrect current password")
 
