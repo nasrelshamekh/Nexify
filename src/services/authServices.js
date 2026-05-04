@@ -10,6 +10,7 @@ export async function registerUser(formData) {
             "Content-Type": "application/json"
         }
     })
+    console.log(data)
     return data
 }
 
@@ -19,6 +20,7 @@ export async function loginUser(formData) {
             "Content-Type": "application/json"
         }
     })
+    console.log(data)
     return data
 }
 
@@ -29,6 +31,8 @@ export async function getLoggedUserData() {
             "token": localStorage.getItem("userToken")
         }
     })
+    console.log(data);
+    
     return data
 }
 

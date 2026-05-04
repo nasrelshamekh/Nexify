@@ -19,12 +19,13 @@ export default function PostDetails() {
     queryFn: () => getSinglePost(id),
     enabled: !!id,
   })
+  console.log(data)
 
   // update state when data changes
   useEffect(() => {
-    if (data?.data?.post) {
-      setPost(data.data.post)
-      setPostComments(data.data.post.comments || [])
+    if (data?.data?.data?.post) {
+      setPost(data.data.data.post)
+      setPostComments(data?.data?.post?.comments || [])
     }
   }, [data])
 

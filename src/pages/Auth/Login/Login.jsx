@@ -36,8 +36,8 @@ export default function Login() {
 
       setSuccessMsg(data.message)
       toast.success(data.message)
-      localStorage.setItem("userToken", data?.token)
-      setToken(data?.token)
+      localStorage.setItem("userToken", data?.data?.token)
+      setToken(data?.data?.token)
       navigate("/home")
     } catch (error) {
 

@@ -17,10 +17,12 @@ export default function NewsFeed() {
     queryKey: ["getPosts", page],
     queryFn: () => getAllPosts(page)
   })
+  console.log(data)
+  console.log(data?.data?.data?.posts)
 
   useEffect(() => {
-    if (data?.data.paginationInfo.numberOfPages) {
-      setTotalPages(data.data.paginationInfo.numberOfPages)
+    if (data?.data.meta.pagination.numberOfPages) {
+      setTotalPages(data.data.meta.pagination.numberOfPages)
       setInitialLoad(false)
     }
 
@@ -45,14 +47,14 @@ export default function NewsFeed() {
             <div className="col-span-1 lg:col-span-2 space-y-3 sm:space-y-5">
               <CreatePost />
               {isLoading ? [...Array(5)].map((skeleton, index) => <PostSkeleton key={index} />) : <>
-                {data?.data.posts && data?.data.posts.map((post) => <Post key={post.id} post={post} />)}
+                {data?.data?.data?.posts && data?.data?.data?.posts.map((post) => <Post key={post.id} post={post} />)}
               </>}
               {initialLoad ? <Skeleton className="h-3 w-3/5 rounded-lg mx-auto" /> : <>
                 <Pagination
-                  key={data?.data.paginationInfo.numberOfPages}
+                  key={data?.data.meta.pagination.numberOfPages}
                   onChange={setPage}
                   page={page}
-                  total={data?.data.paginationInfo.numberOfPages || totalPages}
+                  total={data?.data.meta.pagination.numberOfPages || totalPages}
                   showControls
                   className='cursor-pointer flex justify-center'
                   isCompact={true}

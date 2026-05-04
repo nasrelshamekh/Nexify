@@ -12,7 +12,7 @@ export default function AuthContextProvider({ children }) {
         try {
             const { data } = await getLoggedUserData()
 
-            setUserData(data.user)
+            setUserData(data.data.user)
 
         } catch (error) {
 

@@ -25,7 +25,7 @@ export default function UserProfile() {
   });
 
   useEffect(() => {
-    if (data?.data?.posts) setPosts(data.data.posts);
+    if (data?.data?.data?.posts) setPosts(data?.data?.data?.posts);
     window.scrollTo({ top: 0, behavior: "smooth" })
   }, [data]);
 
@@ -177,7 +177,7 @@ export default function UserProfile() {
 
                           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                             <span className="font-semibold sm:w-28 text-gray-700 text-sm sm:text-base">Date of Birth:</span>
-                            <span className="text-gray-600 text-sm sm:text-base">{userData.dateOfBirth}</span>
+                            <span className="text-gray-600 text-sm sm:text-base">{new Date(userData.dateOfBirth).toLocaleString("en-US", { dateStyle: "long" })}</span>
                           </div>
                         </div>
 
