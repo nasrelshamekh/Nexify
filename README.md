@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **Upcoming Update:** This project will be updated with new APIs soon. Stay tuned for enhanced functionality and usage!
+> **Upcoming Update:** This project will be updated with new APIs soon and with new features! Features to be added: 1. Likes & Bookmarks 2. Sharing posts 3. Notifications. Stay tuned!
 
 # React + Vite
 
