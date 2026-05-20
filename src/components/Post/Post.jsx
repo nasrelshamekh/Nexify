@@ -2,11 +2,9 @@ import CardHeader from '../PostCard/CardHeader';
 import CardBody from '../PostCard/CardBody';
 import CardFooter from '../PostCard/CardFooter';
 import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-export default function Post({ post, getAllPosts }) {
-
-    const [postComments, setPostComments] = useState(post.comments || [])
-
+export default function Post({ post, getAllPosts, page }) {
 
     return (
         <>
@@ -14,14 +12,14 @@ export default function Post({ post, getAllPosts }) {
 
                 <CardHeader id={post._id} post={post} getAllPosts={getAllPosts} postUserId={post.user?._id} photo={post.user?.photo} name={post.user?.name} createdAt={post.createdAt} />
 
-                <CardBody setPostComments={setPostComments} id={post._id} body={post.body} image={post.image} commentsLength={postComments.length} />
+                <CardBody page={page} post={post} id={post._id} body={post.body} image={post.image} likesCount={post.likesCount} />
 
-                {postComments.length > 0 && <>
+                {post.commentsCount > 0 && <>
                     <CardFooter
+                    comment={post?.topComment}
                     postId = {post._id}
                     postUserId={post.user._id}
-                        comment= {postComments[0]} 
-                        setPostComments={setPostComments}
+                    post={post}
                         />
                 </>}
             </div>

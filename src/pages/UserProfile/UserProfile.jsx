@@ -13,22 +13,16 @@ import UserProfileModal from "../../components/UserProfileModal/UserProfileModal
 export default function UserProfile() {
 
   const { userData } = useContext(authContext)
-  const [posts, setPosts] = useState([]);
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  // Fetch user posts using React Query
   const { data, isLoading } = useQuery({
     queryKey: ["userPosts", userData?._id],
     queryFn: () => getUserPosts(userData._id),
-    enabled: !!userData?._id, // only run if userData._id exists
+    enabled: !!userData?._id
   });
 
-  useEffect(() => {
-    if (data?.data?.data?.posts) setPosts(data?.data?.data?.posts);
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }, [data]);
-
+  const posts = data?.data?.data?.posts ?? []
 
   return (
     <div className="min-h-screen bg-gray-100 pb-10">

@@ -17,6 +17,7 @@ import { IoMdPhotos } from "react-icons/io";
 import { createPost, updatePost } from "../../services/postServices";
 import { authContext } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function CreatePostModal({ post, isOpen, onOpenChange, callback }) {
@@ -27,6 +28,7 @@ export default function CreatePostModal({ post, isOpen, onOpenChange, callback }
     const [formDataFile, setFormDataFile] = useState("")
     const fileInput = useRef()
     const statusMsg = useRef()
+    const queryClient = useQueryClient()
 
     function openFileInput() {
         fileInput.current.click()
@@ -49,7 +51,7 @@ export default function CreatePostModal({ post, isOpen, onOpenChange, callback }
         try {
             if (post) {
                 const { data } = await updatePost(post._id, formData)
-                
+                queryClient.invalidateQueries(post._id)
                 toast.success("Post has been updated!")
             } else {
             const { data } = await createPost(formData)

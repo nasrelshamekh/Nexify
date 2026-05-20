@@ -47,7 +47,7 @@ export default function NewsFeed() {
             <div className="col-span-1 lg:col-span-2 space-y-3 sm:space-y-5">
               <CreatePost />
               {isLoading ? [...Array(5)].map((skeleton, index) => <PostSkeleton key={index} />) : <>
-                {data?.data?.data?.posts && data?.data?.data?.posts.map((post) => <Post key={post.id} post={post} />)}
+                {data?.data?.data?.posts && data?.data?.data?.posts.map((post) => <Post key={post.id} post={post} page={page} />)}
               </>}
               {initialLoad ? <Skeleton className="h-3 w-3/5 rounded-lg mx-auto" /> : <>
                 <Pagination

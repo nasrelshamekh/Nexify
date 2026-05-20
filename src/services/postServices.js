@@ -57,3 +57,21 @@ export async function getUserPosts(userId, page) {
     })
     return data
 }
+
+export async function likeUnlikePost(postId) {
+    const data = await axios.put(`${import.meta.env.VITE_BASE_URL}/posts/${postId}/like`,{}, {
+        headers: {
+            "token" : localStorage.getItem("userToken")
+        }
+    })
+    return data
+}
+
+export async function getPostLikes(postId) {
+    const data = await axios.get(`${import.meta.env.VITE_BASE_URL}/posts/${postId}/likes`, {
+        headers: {
+            "token" : localStorage.getItem("userToken")
+        }
+    })
+    return data
+}
