@@ -20,10 +20,12 @@ import { useContext, useState } from "react";
 import { authContext } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { notisContext } from "../../Context/NotisContext";
 
 export default function Navbar() {
 
   const { token, setToken, userData, isLoading } = useContext(authContext)
+  const { unReadNotisCount } = useContext(notisContext)
   const navigate = useNavigate()
   const [showSearch, setShowSearch] = useState(false);
 
@@ -89,7 +91,7 @@ export default function Navbar() {
 
         {/* Notifications */}
         <NavbarItem className="bg-gray-200 size-9 sm:size-10 flex justify-center items-center rounded-full">
-          <Badge color="danger" content="5" size="sm">
+          <Badge color="danger" content={unReadNotisCount} size="sm">
             <FaBell className="text-lg sm:text-2xl" />
           </Badge>
         </NavbarItem>

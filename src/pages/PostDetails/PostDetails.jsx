@@ -13,19 +13,23 @@ export default function PostDetails() {
   
   const [post, setPost] = useState(null)
   const [postComments, setPostComments] = useState([])
+  const [postLikesCount, setPostLikesCount] = useState(0)
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['singlePost', id],
     queryFn: () => getSinglePost(id),
     enabled: !!id,
+    refetchOnWindowFocus: true,
   })
   console.log(data)
+  
+  
 
-  // update state when data changes
   useEffect(() => {
     if (data?.data?.data?.post) {
       setPost(data.data.data.post)
       setPostComments(data?.data?.post?.comments || [])
+      setPostLikesCount(data?.data?.data?.post?.likesCount || 0)
     }
   }, [data])
 
@@ -62,6 +66,8 @@ export default function PostDetails() {
                     body={post.body}
                     image={post.image}
                     commentsLength={postComments.length}
+                    likesCount={postLikesCount}
+                    setPostLikesCount={setPostLikesCount}
                   />
 
                   {postComments.length > 0 &&

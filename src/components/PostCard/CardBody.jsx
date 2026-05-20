@@ -1,17 +1,33 @@
-import { Button } from '@heroui/react'
-import React, { useState } from 'react'
-import { AiOutlineHeart } from 'react-icons/ai'
+import { Button, user } from '@heroui/react'
+import React, { startTransition, useContext, useEffect, useOptimistic, useState } from 'react'
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { BiCamera, BiMessageRounded, BiShareAlt } from 'react-icons/bi'
 import { BsEmojiSmile } from 'react-icons/bs'
 import { FiSend } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import { createComment } from '../../services/commentsServices'
 import { toast } from 'react-toastify'
+import { likeUnlikePost } from '../../services/postServices'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { authContext } from '../../Context/AuthContext'
+import { motion } from "framer-motion";
+import { FaHeart } from "react-icons/fa";
+import { likesColorContext } from '../../Context/LikesColorContext'
 
-export default function CardBody({ id, body, image, commentsLength, isPostDetails, setPostComments }) {
+export default function CardBody({ post, id, body, image, commentsLength, isPostDetails, setPostComments, setPostLikesCount, likesCount }) {
 
+  const queryClient = useQueryClient()
+  const { userData } = useContext(authContext)
   const [commentMsg, setCommentMsg] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingLikes, setIsLoadingLikes] = useState(false)
+  console.log(post)
+  const { isLiked, setIsLiked } = useContext(likesColorContext)
+  useEffect(() => {
+    if (post?.likes && userData?._id) {
+      setIsLiked(post.likes.includes(userData._id))
+    }
+  }, [post, userData])
 
   async function addComment(comment) {
     setIsLoading(true)
@@ -35,6 +51,32 @@ export default function CardBody({ id, body, image, commentsLength, isPostDetail
     setCommentMsg(e.target.value)
   }
 
+
+
+  async function handleLike() {
+    setIsLoadingLikes(true)
+    try {
+      const { data } = await likeUnlikePost(id)
+      console.log(data)
+      queryClient.invalidateQueries(['singlePost', id])
+        setPostLikesCount(data.data.likesCount)
+        toast.success("Post liked/unliked successfully!")
+        if (post?.likes && userData?._id) {
+          setIsLiked(post.likes.includes(userData._id))
+        }
+
+    } catch (error) {
+      console.error("Error occurred while liking/unliking post:", error)
+    } finally {
+      setIsLoadingLikes(false)
+    }
+  }
+
+  const handleLikeAndColor = () => {
+    setIsLiked(!isLiked);
+    handleLike();
+  }
+
   return (
     <>
 
@@ -51,12 +93,32 @@ export default function CardBody({ id, body, image, commentsLength, isPostDetail
         />
       </div>
       <div className="flex items-center gap-6 px-4 py-3 border-b border-gray-100">
-        <button
-          className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors"
-        >
-          <AiOutlineHeart className="w-6 h-6" />
-          <span className="font-medium">1200</span>
-        </button>
+        <div className='flex items-center gap-2'>
+          <motion.button
+            onClick={handleLikeAndColor}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.85, rotate: 10 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              outline: "none",
+              padding: "10px",
+            }}
+          >
+            <FaHeart className='w-6 h-6 cursor-pointer'
+              size={32}
+              color={isLiked ? "#ff2d55" : "#c7c7cc"}
+              style={{
+                transition: "color 0.2s ease-in-out",
+              }}
+
+            />
+
+          </motion.button>
+          <span className="font-medium">{likesCount}</span>
+        </div>
         <Link to={`/post-details/${id}`} className="flex items-center gap-2 text-gray-600 hover:text-blue-500 transition-colors">
           <BiMessageRounded className="w-6 h-6" />
           <span className="font-medium">{commentsLength}</span>
