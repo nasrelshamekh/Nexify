@@ -1,7 +1,7 @@
 import axios from "axios"
 
-export async function createComment(comment) {
-    const data = await axios.post(`${import.meta.env.VITE_BASE_URL}/comments`, comment, {
+export async function createComment(postId ,formData) {
+    const data = await axios.post(`${import.meta.env.VITE_BASE_URL}/posts/${postId}/comments`, formData, {
         headers: {
             "token": localStorage.getItem("userToken")
         }

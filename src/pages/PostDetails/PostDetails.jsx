@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { getSinglePost } from '../../services/postServices'
 import CardHeader from '../../components/PostCard/CardHeader'
@@ -6,14 +6,12 @@ import CardBody from '../../components/PostCard/CardBody'
 import CardFooter from '../../components/PostCard/CardFooter'
 import PostSkeleton from '../../components/Skeletons/PostSkeleton'
 import Sidebar from '../../components/Sidebar/Sidebar'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { getPostComments } from '../../services/commentsServices'
 
 export default function PostDetails() {
   const { id } = useParams()
-  
-  const [post, setPost] = useState(null)
-  const [postComments, setPostComments] = useState([])
-  const [postLikesCount, setPostLikesCount] = useState(0)
+  const queryClient = useQueryClient()
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['singlePost', id],
@@ -21,33 +19,31 @@ export default function PostDetails() {
     enabled: !!id,
     refetchOnWindowFocus: true,
   })
-  console.log(data)
-  
+
+  const { data: postComments } = useQuery({
+    queryKey: ['postComments', id],
+    queryFn: () => getPostComments(id),
+    enabled: !!id,
+  })
   
 
-  useEffect(() => {
-    if (data?.data?.data?.post) {
-      setPost(data.data.data.post)
-      setPostComments(data?.data?.post?.comments || [])
-      setPostLikesCount(data?.data?.data?.post?.likesCount || 0)
-    }
-  }, [data])
+
+  const post = data?.data?.data?.post
+  const comments = postComments?.data?.data?.comments
 
   return (
     <main className="min-h-screen bg-gray-200">
       <div className="container p-3 sm:p-5">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 lg:gap-5">
-          {/* Sidebar - Hidden on mobile/tablet, visible on large screens */}
           <div className="hidden lg:block lg:col-span-1">
             <Sidebar />
           </div>
 
-          {/* Main Content - Full width on mobile/tablet, 3 columns on large screens */}
           <div className="col-span-1 lg:col-span-3">
             <div className="w-full lg:max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200">
-              {isLoading || !post ? 
+              {isLoading || !post ? (
                 <PostSkeleton />
-               : 
+              ) : (
                 <>
                   <CardHeader
                     isPostDetails={true}
@@ -60,28 +56,26 @@ export default function PostDetails() {
                   />
 
                   <CardBody
-                    setPostComments={setPostComments}
                     isPostDetails={true}
+                    post={post}
                     id={id}
                     body={post.body}
                     image={post.image}
-                    commentsLength={postComments.length}
-                    likesCount={postLikesCount}
-                    setPostLikesCount={setPostLikesCount}
+                    commentsLength={post.commentsCount}
+                    likesCount={post.likesCount}
                   />
 
-                  {postComments.length > 0 &&
-                    postComments.map((comment) => (
-                      <CardFooter
-                        key={comment._id}
-                        comment={comment}
-                        postUserId={post.user._id}
-                        postId={id}
-                        setPostComments={setPostComments}
-                      />
-                    ))}
+                  {comments?.map((comment) => (
+                    <CardFooter
+                      key={comment._id}
+                      comment={comment}
+                      postUserId={post.user._id}
+                      postId={id}
+                      setPostComments={() => queryClient.invalidateQueries({ queryKey: ['singlePost', id] })}
+                    />
+                  ))}
                 </>
-              }
+              )}
             </div>
           </div>
         </div>
