@@ -27,29 +27,7 @@ export default function CardBody({ page, post, id, body, image, isPostDetails, l
   const fileInput = useRef()
   const commentMsg = useRef()
 
-  /*async function addComment(comment, postId) {
-    setIsLoading(true)
-    try {
-      const { data } = await createComment(formData, post?._id)
-      setCommentMsg("")
-      toast.success("Comment added successfully!")
-      console.log(data)
-
-    } catch (error) {
-
-
-    } finally {
-      setIsLoading(false)
-    }
-
-  }*/
-
-  /*function sendComment(e) {
-    setCommentMsg(e.target.value)
-    console.log(e.target.value)
-  }*/
-
-  const { mutate: handleLike } = useMutation({
+    const { mutate: handleLike } = useMutation({
     mutationFn: () => likeUnlikePost(id),
 
     onMutate: async () => {
@@ -220,32 +198,6 @@ export default function CardBody({ page, post, id, body, image, isPostDetails, l
     } finally {
       setIsLoading(false)
     }
-  }
-
-
-
-  async function handleLike() {
-    setIsLoadingLikes(true)
-    try {
-      const { data } = await likeUnlikePost(id)
-      console.log(data)
-      queryClient.invalidateQueries(['singlePost', id])
-        setPostLikesCount(data.data.likesCount)
-        toast.success("Post liked/unliked successfully!")
-        if (post?.likes && userData?._id) {
-          setIsLiked(post.likes.includes(userData._id))
-        }
-
-    } catch (error) {
-      console.error("Error occurred while liking/unliking post:", error)
-    } finally {
-      setIsLoadingLikes(false)
-    }
-  }
-
-  const handleLikeAndColor = () => {
-    setIsLiked(!isLiked);
-    handleLike();
   }
 
   return (
