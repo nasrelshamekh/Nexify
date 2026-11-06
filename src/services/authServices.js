@@ -52,3 +52,16 @@ export async function changeUserPassword(password, newPassword) {
     );
     return data;
 }
+
+export async function uploadProfilePhoto(formData) {
+    const token = localStorage.getItem("userToken");
+    const headers = {};
+    if (token) {
+        headers["token"] = token;
+        headers["Authorization"] = `Bearer ${token}`;
+    }
+    const data = await axios.put(`${apiURL}/users/upload-photo`, formData, {
+        headers
+    });
+    return data;
+}
