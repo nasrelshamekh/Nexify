@@ -16,37 +16,42 @@ export default function CardHeader({ post, photo, name, createdAt, postUserId, g
   const queryClient = useQueryClient()
 
   async function deleteCurrentPost() {
-
     try {
-      const { data } = await deletePost(post._id)
+      await deletePost(post?._id)
 
       if (isPostDetails) {
         navigate("/home")
       } else {
-        queryClient.invalidateQueries(["getPosts"])
+        queryClient.invalidateQueries({ queryKey: ["getPosts"] })
       }
       toast.success("Post has been deleted!")
     } catch (error) {
-
-
+      console.error("Error deleting post:", error)
+      const err = error.response?.data?.message || "Failed to delete post."
+      toast.error(err)
     }
   }
+
+  const avatarSrc = photo || "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"
+  const isPostOwner = userData?._id && postUserId && userData._id === postUserId
 
   return (
     <>
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
           <img
-            src={photo}
-            alt="John Carter"
+            src={avatarSrc}
+            alt={name || "User"}
             className="w-12 h-12 rounded-full object-cover"
           />
           <div>
-            <h3 className="font-semibold text-gray-900">{name}</h3>
-            <p className="text-sm text-gray-500">{new Date(createdAt).toLocaleString("en-US", { dateStyle: "long", timeStyle: "short" })}</p>
+            <h3 className="font-semibold text-gray-900">{name || "User"}</h3>
+            <p className="text-sm text-gray-500">
+              {createdAt ? new Date(createdAt).toLocaleString("en-US", { dateStyle: "long", timeStyle: "short" }) : ""}
+            </p>
           </div>
         </div>
-        {userData._id == postUserId && <Dropdown placement="bottom-end">
+        {isPostOwner && <Dropdown placement="bottom-end">
           <DropdownTrigger className="cursor-pointer">
             <BsThreeDotsVertical className="w-5 h-5" />
           </DropdownTrigger>

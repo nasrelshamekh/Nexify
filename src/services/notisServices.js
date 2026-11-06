@@ -1,16 +1,18 @@
 import axios from "axios";
 
-
-const apiURL = import.meta.env.VITE_BASE_URL
-
+const apiURL = import.meta.env.VITE_BASE_URL;
 
 export async function getUnReadNotisCount() {
+    const token = localStorage.getItem("userToken");
+    if (!token) {
+        return { data: { data: { unreadCount: 0 } } };
+    }
     const data = await axios.get(`${apiURL}/notifications/unread-count`, {
         headers: {
             "Content-Type": "application/json",
-            "token": localStorage.getItem("userToken")
+            "token": token,
+            "Authorization": `Bearer ${token}`
         }
-    })
-    console.log(data)
-    return data
+    });
+    return data;
 }

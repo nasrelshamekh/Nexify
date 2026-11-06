@@ -25,11 +25,9 @@ export default function PostDetails() {
     queryFn: () => getPostComments(id),
     enabled: !!id,
   })
-  
 
-
-  const post = data?.data?.data?.post
-  const comments = postComments?.data?.data?.comments
+  const post = data?.data?.data?.post || data?.data?.post
+  const comments = postComments?.data?.data?.comments || postComments?.data?.comments
 
   return (
     <main className="min-h-screen bg-gray-200">
@@ -49,9 +47,9 @@ export default function PostDetails() {
                     isPostDetails={true}
                     getAllPosts={refetch}
                     post={post}
-                    postUserId={post.user._id}
-                    photo={post.user.photo}
-                    name={post.user.name}
+                    postUserId={post.user?._id}
+                    photo={post.user?.photo}
+                    name={post.user?.name}
                     createdAt={post.createdAt}
                   />
 
@@ -69,9 +67,12 @@ export default function PostDetails() {
                     <CardFooter
                       key={comment._id}
                       comment={comment}
-                      postUserId={post.user._id}
+                      postUserId={post.user?._id}
                       postId={id}
-                      setPostComments={() => queryClient.invalidateQueries({ queryKey: ['singlePost', id] })}
+                      setPostComments={() => {
+                        queryClient.invalidateQueries({ queryKey: ['singlePost', id] })
+                        queryClient.invalidateQueries({ queryKey: ['postComments', id] })
+                      }}
                     />
                   ))}
                 </>

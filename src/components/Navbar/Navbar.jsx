@@ -31,7 +31,7 @@ export default function Navbar() {
 
   function logoutUser() {
     localStorage.removeItem("userToken")
-    setToken(false)
+    setToken(null)
     navigate("/login")
   }
 
@@ -103,17 +103,17 @@ export default function Navbar() {
             <Avatar
               isBordered
               as="button"
-              name={userData.name}
+              name={userData?.name || "User"}
               size="sm"
               className="w-8 h-8 sm:w-10 sm:h-10"
-              src={userData.photo || "https://i.pravatar.cc/150?u=a042581f4e29026704d"}
+              src={userData?.photo || "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"}
             />
             }
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2" textValue={`Signed in as ${userData.email}`}>
+            <DropdownItem key="profile" className="h-14 gap-2" textValue={userData?.email ? `Signed in as ${userData.email}` : "Profile"}>
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">{userData.email}</p>
+              <p className="font-semibold">{userData?.email || ""}</p>
             </DropdownItem>
             <DropdownItem as={Link} to="/profile" key="profile-page">My Profile</DropdownItem>
             <DropdownItem onClick={() => { logoutUser() }} key="logout" color="danger">

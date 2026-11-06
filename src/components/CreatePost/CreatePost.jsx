@@ -24,9 +24,9 @@ export default function CreatePost() {
           </div>
         </div> : <div className="flex items-center gap-2 p-3">
           <div className="size-10 rounded-full overflow-hidden">
-            <img src={userData.photo} alt="User Image" />
+            <img src={userData?.photo || "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"} alt="User Image" />
           </div>
-          <Input type="email" isReadOnly placeholder={`What's on your mind, ${userData.name}?`} onClick={onOpen} />
+          <Input type="email" isReadOnly placeholder={`What's on your mind, ${userData?.name || "there"}?`} onClick={onOpen} />
         </div>}
         <Divider />
         <CardFooter>

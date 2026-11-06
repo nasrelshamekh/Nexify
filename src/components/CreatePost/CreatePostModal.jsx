@@ -50,19 +50,19 @@ export default function CreatePostModal({ post, isOpen, onOpenChange, callback }
         setIsLoading(true)
         try {
             if (post) {
-                const { data } = await updatePost(post._id, formData)
-                queryClient.invalidateQueries(post._id)
+                await updatePost(post._id, formData)
+                queryClient.invalidateQueries({ queryKey: [post._id] })
                 toast.success("Post has been updated!")
             } else {
-            const { data } = await createPost(formData)
-            
-            toast.success("Post created!")
-        }
-         onOpenChange(false)
-            callback()
+                await createPost(formData)
+                toast.success("Post created!")
+            }
+            onOpenChange(false)
+            if (typeof callback === 'function') callback()
         } catch (error) {
-            
-
+            console.error("Error creating/updating post:", error)
+            const err = error.response?.data?.message || error.response?.data?.errors || "Failed to submit post."
+            toast.error(err)
         } finally {
             setIsLoading(false)
         }
@@ -82,7 +82,7 @@ export default function CreatePostModal({ post, isOpen, onOpenChange, callback }
                             <ModalHeader className="flex flex-col gap-1 text-center">{post ? "Update" : "Create"} Post</ModalHeader>
                             <Divider />
                             <ModalBody className="p-4">
-                                <Textarea defaultValue={post?.body || ""} ref={statusMsg} minRows={`${selectedPhoto ? "" : 50}`} placeholder={`What's on your mind, ${userData.name}?`} />
+                                <Textarea defaultValue={post?.body || ""} ref={statusMsg} minRows={`${selectedPhoto ? "" : 50}`} placeholder={`What's on your mind, ${userData?.name || "there"}?`} />
                                 {selectedPhoto && <img src={selectedPhoto} alt="" />}
                             </ModalBody>
                             <Divider />
@@ -102,5 +102,5 @@ export default function CreatePostModal({ post, isOpen, onOpenChange, callback }
                 </ModalContent>
             </Modal>
         </>
-    );
+    )
 }

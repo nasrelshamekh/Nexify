@@ -18,7 +18,7 @@ export default function UserProfile() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["userPosts", userData?._id],
-    queryFn: () => getUserPosts(userData._id),
+    queryFn: () => getUserPosts(userData?._id),
     enabled: !!userData?._id
   });
 
@@ -58,7 +58,7 @@ export default function UserProfile() {
               {/* Profile Image */}
               <div className="relative shrink-0 w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-lg mx-auto md:mx-0">
                 <img
-                  src={userData.photo}
+                  src={userData?.photo || "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"}
                   alt="profile"
                   className="w-full h-full object-cover"
                 />
@@ -66,7 +66,7 @@ export default function UserProfile() {
 
               {/* User Info */}
               <div className="grow text-center md:text-left">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 md:text-white">{userData.name}</h1>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 md:text-white">{userData?.name || "User"}</h1>
                 <p className="text-sm sm:text-base text-gray-500">Frontend Developer</p>
 
                 <div className="flex justify-center md:justify-start gap-4 sm:gap-6 mt-2 sm:mt-3 text-sm sm:text-base text-gray-700">
@@ -129,7 +129,7 @@ export default function UserProfile() {
                             key={post._id}
                             post={post}
                             getAllPosts={() =>
-                              queryClient.invalidateQueries(["userPosts", userData._id])
+                              queryClient.invalidateQueries(["userPosts", userData?._id])
                             }
                           />
                         ))
@@ -156,22 +156,22 @@ export default function UserProfile() {
                         <div className="space-y-3 sm:space-y-4">
                           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                             <span className="font-semibold sm:w-28 text-gray-700 text-sm sm:text-base">Full Name:</span>
-                            <span className="text-gray-600 text-sm sm:text-base">{userData.name}</span>
+                            <span className="text-gray-600 text-sm sm:text-base">{userData?.name}</span>
                           </div>
 
                           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                             <span className="font-semibold sm:w-28 text-gray-700 text-sm sm:text-base">Gender:</span>
-                            <span className="text-gray-600 text-sm sm:text-base">{userData.gender == "male" ? "Male" : "Female"}</span>
+                            <span className="text-gray-600 text-sm sm:text-base">{userData?.gender === "male" ? "Male" : "Female"}</span>
                           </div>
 
                           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                             <span className="font-semibold sm:w-28 text-gray-700 text-sm sm:text-base">Email:</span>
-                            <span className="text-gray-600 text-sm sm:text-base break-all">{userData.email}</span>
+                            <span className="text-gray-600 text-sm sm:text-base break-all">{userData?.email}</span>
                           </div>
 
                           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                             <span className="font-semibold sm:w-28 text-gray-700 text-sm sm:text-base">Date of Birth:</span>
-                            <span className="text-gray-600 text-sm sm:text-base">{new Date(userData.dateOfBirth).toLocaleString("en-US", { dateStyle: "long" })}</span>
+                            <span className="text-gray-600 text-sm sm:text-base">{userData?.dateOfBirth ? new Date(userData.dateOfBirth).toLocaleString("en-US", { dateStyle: "long" }) : ""}</span>
                           </div>
                         </div>
 
@@ -189,7 +189,7 @@ export default function UserProfile() {
 
                           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                             <span className="font-semibold sm:w-28 text-gray-700 text-sm sm:text-base">Joined:</span>
-                            <span className="text-gray-600 text-sm sm:text-base">{new Date(userData.createdAt).toLocaleString("en-US", { dateStyle: "long" })}</span>
+                            <span className="text-gray-600 text-sm sm:text-base">{userData?.createdAt ? new Date(userData.createdAt).toLocaleString("en-US", { dateStyle: "long" }) : ""}</span>
                           </div>
 
                           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">

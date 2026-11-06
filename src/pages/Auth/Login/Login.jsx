@@ -33,16 +33,20 @@ export default function Login() {
 
     try {
       const { data } = await loginUser(formData)
+      const token = data?.data?.token || data?.token
 
-      setSuccessMsg(data.message)
-      toast.success(data.message)
-      localStorage.setItem("userToken", data?.data?.token)
-      setToken(data?.data?.token)
+      const msg = data?.message || "Signed in successfully"
+      setSuccessMsg(msg)
+      toast.success(msg)
+      if (token) {
+        localStorage.setItem("userToken", token)
+        setToken(token)
+      }
       navigate("/home")
     } catch (error) {
-
-      setErrorMsg(error.response.data.error)
-      toast.error(error.response.data.error)
+      const err = error.response?.data?.message || error.response?.data?.errors || error.response?.data?.error || "Login failed. Please check your credentials."
+      setErrorMsg(err)
+      toast.error(err)
     }
 
   }

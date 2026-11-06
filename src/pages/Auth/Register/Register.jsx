@@ -35,15 +35,15 @@ export default function Register() {
 
     try {
       const response = await registerUser(data)
+      const msg = response?.data?.message || "Registration successful!"
 
-      setSuccessMsg(response.data.message)
-      toast.success(response.data.message)
+      setSuccessMsg(msg)
+      toast.success(msg)
       navigate("/login")
     } catch (error) {
-
-      setErrorMsg(error.response.data.error)
-      toast.error(error.response.data.error)
-
+      const err = error.response?.data?.message || error.response?.data?.errors || error.response?.data?.error || "Registration failed. Please try again."
+      setErrorMsg(err)
+      toast.error(err)
     }
 
   }

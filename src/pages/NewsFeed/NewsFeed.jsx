@@ -17,17 +17,13 @@ export default function NewsFeed() {
     queryKey: ["getPosts", page],
     queryFn: () => getAllPosts(page)
   })
-  console.log(data)
-  console.log(data?.data?.data?.posts)
 
   useEffect(() => {
-    if (data?.data.meta.pagination.numberOfPages) {
+    if (data?.data?.meta?.pagination?.numberOfPages) {
       setTotalPages(data.data.meta.pagination.numberOfPages)
       setInitialLoad(false)
     }
-
   }, [data])
-
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -46,15 +42,15 @@ export default function NewsFeed() {
             {/* Main Content - Full width on mobile/tablet, 2 columns on large screens */}
             <div className="col-span-1 lg:col-span-2 space-y-3 sm:space-y-5">
               <CreatePost />
-              {isLoading ? [...Array(5)].map((skeleton, index) => <PostSkeleton key={index} />) : <>
-                {data?.data?.data?.posts && data?.data?.data?.posts.map((post) => <Post key={post.id} post={post} page={page} />)}
+              {isLoading ? [...Array(5)].map((_, index) => <PostSkeleton key={index} />) : <>
+                {data?.data?.data?.posts && data?.data?.data?.posts.map((post) => <Post key={post.id || post._id} post={post} page={page} />)}
               </>}
               {initialLoad ? <Skeleton className="h-3 w-3/5 rounded-lg mx-auto" /> : <>
                 <Pagination
-                  key={data?.data.meta.pagination.numberOfPages}
+                  key={data?.data?.meta?.pagination?.numberOfPages || totalPages}
                   onChange={setPage}
                   page={page}
-                  total={data?.data.meta.pagination.numberOfPages || totalPages}
+                  total={data?.data?.meta?.pagination?.numberOfPages || totalPages}
                   showControls
                   className='cursor-pointer flex justify-center'
                   isCompact={true}
